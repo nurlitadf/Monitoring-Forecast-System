@@ -4,8 +4,10 @@ import re
 import sys
 import os
 import pymysql
+import datetime
 
 URL = "https://ftp.cpc.ncep.noaa.gov/International/nmme/monthly_nmme_forecast_in_cpt_format/"
+CURRENT_YEAR = datetime.datetime.now().year
 ID_COORD = {
 	'LAT_MIN' : '-12',
 	'LAT_MAX' : '7',
@@ -26,7 +28,7 @@ cur.execute(sql)
 res = cur.fetchall()
 data = dict()
 for item in res:
-	key = (item[1], item[7], item[2]) #model, month, year
+	key = (item[1], item[7], item[2], item[8]) #model, month, year, type
 	value = item[3] #created_date
 	data[key] = value
 
@@ -37,22 +39,22 @@ if not resp.ok:
 soup = BeautifulSoup(resp.text, 'html.parser')
 anchor = soup.find_all('a')
 for anc in anchor:
-	res = re.search('href(.)*_tmp2m(.)*(2019|2020)\.txt\">', str(anc))
-
+	res = re.search('href(.)*(' + '|'.join(str(x) for x in range(CURRENT_YEAR - 1, CURRENT_YEAR + 2)) +')\.txt\">', str(anc))
 	if res:
 		res = res.group(0)
 		model = re.search('"([a-z]+[0-9]*)', res).group(0)[1:]
+		types = re.search('(sst|tmp2m|precip)', res).group(0)
 		new_url = URL + res[6:-2]
 		frc = requests.get(new_url)
 		print(new_url)
 		if not frc.ok:
 			print("failed fetch forecast data")
 			sys.exit(1)
-		splitted = frc.text.split()
-		predict = "".join(list(splitted[5])[6:-1]).split('-')
-		created = "".join(list(splitted[6])[6:-1])
+		splitted = frc.text.split(', ')
+		predict = "".join(list(splitted[1])[6:]).split('-')
+		created = "".join(list(splitted[2])[6:])
 		print(model + " for prediction date: ", predict)
-		key = (model, predict[1], predict[0], -12, 94)
+		key = (model, predict[1], predict[0], types)
 		will_query = True
 		will_update = False
 		try:
@@ -70,7 +72,7 @@ for anc in anchor:
 		else:
 			print("Skipping :)")
 		if will_query == True:
-			key = (model, predict[1], predict[0])
+			key = (model, predict[1], predict[0], types)
 			data[key] = created
 			txt = splitted[(373 + 361 * 83):(373 + 361 * 103)]
 			latlng = []
@@ -81,7 +83,7 @@ for anc in anchor:
 				lng_cnt = 94
 				for lng in lat:
 					if not will_update:
-						sql = """insert into data(model, year, created_date, latitude, longitude, value, month) values ('%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (model, predict[0], created, lat_cnt, lng_cnt, lng, predict[1])
+						sql = """insert into data(model, year, created_date, lat, long, value, month, type) values ('%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (model, predict[0], created, lat_cnt, lng_cnt, lng, predict[1], types)
 						# print("inserting " + model + " for prediction date: " +",".join(predict) + " lat lng: " + str(lat_cnt) + str(lng_cnt))
 						cur.execute(sql)
 					else:
