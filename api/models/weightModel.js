@@ -1,9 +1,12 @@
 const QueryBuilder = require('node-querybuilder');
- 
+const bcrypt = require('bcrypt');
+
+const saltRounds = 10;
+
 let response = null;
 let qb = null;
 
-exports.getDataByModelMonthYear = async (model, month, year) => {
+exports.getWeightModel = async () => {
     try {
         const settings = {
             host: process.env.DB_HOST,
@@ -14,14 +17,11 @@ exports.getDataByModelMonthYear = async (model, month, year) => {
         const pool = new QueryBuilder(settings, 'mysql', 'pool');
 
         qb = await pool.get_connection();
-        response = await qb.select('lat, lon, value')
-            .where({'model': model, 'year': year, 'month': month})
-            .get('data');
- 
+
+        response = await qb.select('model, weight').get('weight_model');
+
         console.log("Query Ran: " + qb.last_query());
- 
-        // [{name: 'Mercury', position: 1}, {name: 'Mars', position: 4}]
-        // console.log("Results:", response);
+
     } catch (err) {
         return console.error("Uh oh! Couldn't get results: " + err.msg);
     } finally {
@@ -30,7 +30,7 @@ exports.getDataByModelMonthYear = async (model, month, year) => {
     }
 }
 
-exports.getData = async () => {
+exports.updateWeightModel = async (model, weight) => {
     try {
         const settings = {
             host: process.env.DB_HOST,
@@ -41,17 +41,16 @@ exports.getData = async () => {
         const pool = new QueryBuilder(settings, 'mysql', 'pool');
 
         qb = await pool.get_connection();
-        response = await qb.select('lat, lon, value')
-            .get('data');
- 
-        console.log("Query Ran: " + qb.last_query());
- 
-        // [{name: 'Mercury', position: 1}, {name: 'Mars', position: 4}]
-        // console.log("Results:", response);
+
+        const response = await qb.set({'weight': weight})
+            .where({'model': model})
+            .update('weight_model');
+        
+        qb.disconnect();
+
+        return response;
+        
     } catch (err) {
         return console.error("Uh oh! Couldn't get results: " + err.msg);
-    } finally {
-        qb.disconnect();
-        return response;
     }
 }
