@@ -3,7 +3,7 @@ const QueryBuilder = require('node-querybuilder');
 let response = null;
 let qb = null;
 
-exports.getDataByModelMonthYear = async (model, month, year) => {
+exports.getDataByModelMonthYear = async (model, type, month, year) => {
     try {
         const settings = {
             host: process.env.DB_HOST,
@@ -15,7 +15,7 @@ exports.getDataByModelMonthYear = async (model, month, year) => {
 
         qb = await pool.get_connection();
         response = await qb.select('lat, lon, value')
-            .where({'model': model, 'year': year, 'month': month})
+            .where({'model': model, 'type': type, 'year': year, 'month': month})
             .get('data');
  
         console.log("Query Ran: " + qb.last_query());

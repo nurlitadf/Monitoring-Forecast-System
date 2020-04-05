@@ -53,6 +53,7 @@ for anc in anchor:
 		splitted = frc.text.split(', ')
 		predict = "".join(list(splitted[1])[6:]).split('-')
 		created = "".join(list(splitted[2])[6:])
+		splitted = frc.text.split()
 		print(model + " for prediction date: ", predict)
 		key = (model, predict[1], predict[0], types)
 		will_query = True
@@ -74,7 +75,8 @@ for anc in anchor:
 		if will_query == True:
 			key = (model, predict[1], predict[0], types)
 			data[key] = created
-			txt = splitted[(373 + 361 * 83):(373 + 361 * 103)]
+			start_index = splitted.index("cpt:missing=-999.00000000000000") + 362
+			txt = splitted[(start_index + 361 * 83):(start_index + 361 * 103)]
 			latlng = []
 			for i in range(0, len(txt), 361):
 				latlng.append(txt[(i + 95):(i + 144)])
@@ -83,8 +85,9 @@ for anc in anchor:
 				lng_cnt = 94
 				for lng in lat:
 					if not will_update:
-						sql = """insert into data(model, year, created_date, lat, long, value, month, type) values ('%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (model, predict[0], created, lat_cnt, lng_cnt, lng, predict[1], types)
-						# print("inserting " + model + " for prediction date: " +",".join(predict) + " lat lng: " + str(lat_cnt) + str(lng_cnt))
+						sql = """insert into data(model, year, created_date, lat, lon, value, month, type) values ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (model, predict[0], created, lat_cnt, lng_cnt, lng, predict[1], types)
+						# print(sql)
+						# print("inserting " + model + " for prediction date: " +",".join(predict) + " lat lng: " + str(lat_cnt) + str(lng_cnt))		
 						cur.execute(sql)
 					else:
 						sql = """update data set created_date = '%s', value = '%s'""" % (created, lng)

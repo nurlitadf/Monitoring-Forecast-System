@@ -15,8 +15,8 @@ class Home extends Component {
     this.handleMapChange("CFSv2", "01", "2019");
   }
 
-  handleMapChange(model, month, year) {
-    fetch(`http://localhost:5000/api/data?model=${model}&year=${year}&month=${month}`)
+  handleMapChange(model, type, month, year) {
+    fetch(`http://localhost:5000/api/data?model=${model}&type=${type}&year=${year}&month=${month}`)
       .then(res => {
         res.json().then(res => {
           this.setState({data: res})
@@ -34,7 +34,7 @@ class Home extends Component {
     return (
       <React.Fragment>
         <h2 className="title">Indonesia Monitoring Forecast System</h2>
-        <div>
+        <div style={{width: '50%'}}>
           <Option 
             handleMapChange = {this.handleMapChange}
           />

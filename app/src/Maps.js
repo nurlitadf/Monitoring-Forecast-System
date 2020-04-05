@@ -25,6 +25,10 @@ class Maps extends Component{
     console.log(this.state.data);
   }
 
+  componentDidMount() {
+    Highcharts.charts.forEach(chart => chart.reflow());
+  }
+
   getMapOptions() {
     console.log(this.props.data);
     return {

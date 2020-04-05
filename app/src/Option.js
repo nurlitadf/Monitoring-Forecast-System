@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import moment from 'moment';
 
 import './styles/Option.css';
 
@@ -8,11 +9,13 @@ class Option extends Component {
         super(props);
         this.state = {
             model: "CFSv2",
+            type: "precip",
             month: "01",
-            year: "2019",
+            year: moment().year() - 1,
         }
 
         this.handleModelChange = this.handleModelChange.bind(this);
+        this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleMonthChange = this.handleMonthChange.bind(this);
         this.handleYearChange = this.handleYearChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,6 +23,10 @@ class Option extends Component {
 
     handleModelChange(event) {
         this.setState({model: event.target.value});
+    }
+
+    handleTypeChange(event) {
+        this.setState({type: event.target.value});
     }
 
     handleMonthChange(event) {
@@ -31,12 +38,14 @@ class Option extends Component {
     }
 
     handleSubmit(event) {
+        const { model, type, month, year } = this.state;
         // console.log("test");
-        this.props.handleMapChange(this.state.model, this.state.month, this.state.year);
+        this.props.handleMapChange(model, type, month, year);
         event.preventDefault();
     }
 
     render() {
+        const year = moment().year();
         return (
             <div className="form-style">
                 <Form onSubmit={this.handleSubmit}>
@@ -53,12 +62,22 @@ class Option extends Component {
                             <option value="NMME">NMME</option>
                         </Form.Control>
                     </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Type</Form.Label>
+                        <Form.Control as="select" onChange={this.handleTypeChange}>
+                            <option value="precip">Precipitation</option>
+                            <option value="tmp2m">Air Temperature</option>
+                            <option value="sst">SST</option>
+                        </Form.Control>
+                    </Form.Group>
     
                     <Form.Group>
                         <Form.Label>Year</Form.Label>
                         <Form.Control as="select" onChange={this.handleYearChange}>
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
+                            <option value={year-1}>{year-1}</option>
+                            <option value={year}>{year}</option>
+                            <option value={year+1}>{year+1}</option>
                         </Form.Control>
                     </Form.Group>
     

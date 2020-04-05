@@ -51,10 +51,8 @@ class Admin extends Component {
     }
 
     handleWeightFormSubmit(event) {
-        const model = event.currentTarget.id;
-        const weight = this.state.weightModel.find(e => e.model === model).weight;
-        console.log(model,weight);
-        axios.put(`http://localhost:5000/api/weight-model`, {model: model, weight: weight})
+        // console.log(this.state.weightModel);
+        axios.put(`http://localhost:5000/api/weight-model`, {data: this.state.weightModel})
             .then(res => {
                 this.setState({updateStatus: true})
             });
@@ -75,21 +73,17 @@ class Admin extends Component {
             <React.Fragment>
 
             {this.state.updateStatus && this.updateSuccess()}
-            <div style={{display: 'flex', margin: '70px', justifyContent: 'center'}}>
+            <Form onSubmit={this.handleWeightFormSubmit}>
+                <div style={{display: 'flex', margin: '70px', justifyContent: 'center'}}>
                 <Card bg="light" style={{margin: '10px'}}>
                     <Card.Body>
                         {weightModel.map((value, index) => {
                             if (index % 2 === 0){
                                 return (
-                                    <Form id={value['model']} onSubmit={this.handleWeightFormSubmit}>
-                                        <Form.Group>
-                                            <Form.Label>{value['model']}</Form.Label>
-                                            <Form.Control id={value['model']} value={value['weight']} onChange={this.handleWeightFormChange} />
-                                            <Button variant="primary" type="submit">
-                                                Save
-                                            </Button>
-                                        </Form.Group>
-                                    </Form>
+                                    <Form.Group>
+                                        <Form.Label>{value['model']}</Form.Label>
+                                        <Form.Control id={value['model']} value={value['weight']} onChange={this.handleWeightFormChange} />
+                                    </Form.Group>
                                 );
                             }
                             return null;
@@ -102,31 +96,34 @@ class Admin extends Component {
                         {weightModel.map((value, index) => {
                             if (index % 2 === 1){
                                 return (
-                                    <Form id={value['model']} onSubmit={this.handleWeightFormSubmit}>
-                                        <Form.Group>
-                                            <Form.Label>{value['model']}</Form.Label>
-                                            <Form.Control id={value['model']} value={value['weight']} onChange={this.handleWeightFormChange} />
-                                            <Button variant="primary" type="submit">
-                                                Save
-                                            </Button>
-                                        </Form.Group>
-                                    </Form>
+                                    <Form.Group>
+                                        <Form.Label>{value['model']}</Form.Label>
+                                        <Form.Control id={value['model']} value={value['weight']} onChange={this.handleWeightFormChange} />
+                                    </Form.Group>
                                 );
                             }
                             return null;
                         })}
                     </Card.Body>
                 </Card>
-            </div>
+                </div>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <Button variant="primary" type="submit">
+                        Save
+                    </Button>
+                </div>
+            </Form>
 
             </React.Fragment>
         );
     }
 
     render() {
-        return (
-            <React.Fragment>
-                {this.state.loginStatus === loginStatus.SUCCESS && this.renderWeightForm()}
+        let content;
+        if(this.state.loginStatus === loginStatus.SUCCESS) {
+            content = this.renderWeightForm();
+        } else {
+            content = (
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                     <Login 
                         handleLogin = {this.handleLogin}
@@ -134,6 +131,12 @@ class Admin extends Component {
                     />
 
                 </div>
+            );
+
+        }
+        return (
+            <React.Fragment>
+                {content}
             </React.Fragment>
         );
     }

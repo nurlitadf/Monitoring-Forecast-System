@@ -6,10 +6,11 @@ const router = express.Router();
 
 router.get('/data', async (req, res, next) => {
     const model = req.query['model'] || 'CFSv2';
+    const type = req.query['type'] || 'precip';
     const month = req.query['month'] || 'January';
     const year = req.query['year'] || '2019';
     
-    getDataByModelMonthYear(model,month,year).then((response) => {
+    getDataByModelMonthYear(model,type,month,year).then((response) => {
         res.send(response);
     });
 });
@@ -27,9 +28,9 @@ router.get('/weight-model', async (req, res, next) => {
 });
 
 router.put('/weight-model', async (req, res, next) => {
-    const { model, weight } = req.body;
+    const { data } = req.body;
 
-    updateWeightModel(model, weight).then((response) => {
+    updateWeightModel(data).then((response) => {
         res.send(response);
     });
 });

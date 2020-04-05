@@ -30,8 +30,9 @@ exports.getWeightModel = async () => {
     }
 }
 
-exports.updateWeightModel = async (model, weight) => {
+exports.updateWeightModel = async (data) => {
     try {
+        console.log(data);
         const settings = {
             host: process.env.DB_HOST,
             database: process.env.DB_NAME,
@@ -42,13 +43,15 @@ exports.updateWeightModel = async (model, weight) => {
 
         qb = await pool.get_connection();
 
-        const response = await qb.set({'weight': weight})
-            .where({'model': model})
-            .update('weight_model');
+        data.forEach(async (e) => {
+            await qb.set({'weight': e.weight})
+                .where({'model': e.model})
+                .update('weight_model');
+        });
         
         qb.disconnect();
 
-        return response;
+        return "success";
         
     } catch (err) {
         return console.error("Uh oh! Couldn't get results: " + err.msg);
