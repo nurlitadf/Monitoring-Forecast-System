@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-#import pymysql
+import pymysql
 
 BASE_URL = "https://cews.bmkg.go.id/Probabilistik_Forecast/probability/"
 HOME_URL = "https://cews.bmkg.go.id/Probabilistik_Forecast/One_Month_Probabilistic_Forecast.bmkg"
@@ -9,10 +9,10 @@ DEBUG = False
 
 log = open('error.log', 'a+')
 
-#db = pymysql.connect(host="localhost", user="root", password="123", database="forecast")
-#cur = db.cursor()
-#sql = "DELETE FROM data_bmkg;"
-#cur.execute(sql)
+db = pymysql.connect(host="localhost", user="root", password="123", database="forecast")
+cur = db.cursor()
+sql = "DELETE FROM data_bmkg;"
+cur.execute(sql)
 
 with requests.Session() as sess:
         home = sess.get(HOME_URL)
@@ -33,8 +33,8 @@ with requests.Session() as sess:
                                     error = False
                                     sql = "INSERT INTO data_bmkg(initial_time, lead_time, link) VALUES ('%s', '%s', '%s')" % (m_text, t_text, url)
                                     print(sql)
-                                    #if not DEBUG:
-                                    #   cur.execute(sql)
+                                    if not DEBUG:
+                                      cur.execute(sql)
                                 elif str(resp.status_code)[0] == '4':
                                     error = False
                                         
@@ -44,7 +44,7 @@ with requests.Session() as sess:
 
 
 print("Closing")
-#db.commit()
-#cur.close()
-#db.close()
-#log.close()
+db.commit()
+cur.close()
+db.close()
+log.close()
