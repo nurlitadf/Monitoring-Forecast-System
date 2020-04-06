@@ -84,6 +84,8 @@ for anc in anchor:
 			for lat in latlng:
 				lng_cnt = 94
 				for lng in lat:
+                    if lng == -999:
+                        continue
 					if not will_update:
 						sql = """insert into data(model, year, created_date, lat, lon, value, month, type) values ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (model, predict[0], created, lat_cnt, lng_cnt, lng, predict[1], types)
 						# print(sql)
