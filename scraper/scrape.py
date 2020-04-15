@@ -21,7 +21,7 @@ def is_bounded(lat, lng):
 
 
 os.system("clear")
-db = pymysql.connect(host="localhost", user="root", password="123", database="forecast")
+db = pymysql.connect(host="103.146.203.231", user="root", password="123", database="forecast")
 cur = db.cursor()
 sql = """SELECT * from data;"""
 cur.execute(sql)
