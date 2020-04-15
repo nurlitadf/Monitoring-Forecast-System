@@ -60,6 +60,7 @@ class Option extends Component {
                             <option value="NASA">NASA</option>
                             <option value="NCAR-CCSM4">NCAR-CCSM4</option>
                             <option value="NMME">NMME</option>
+                            <option value="NMME-Weighted">NMME-Weighted</option>
                         </Form.Control>
                     </Form.Group>
 

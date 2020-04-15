@@ -26,14 +26,14 @@ class Admin extends Component {
 
     handleLogin(username, password){
         // console.log(username, password);
-        axios.post(`http://localhost:5000/users/login`, { username: username, password: password })
+        axios.post(`${process.env.REACT_APP_API_URL}users/login`, { username: username, password: password })
             .then(res => {
                 this.setState({loginStatus: res.data});
             });
     }
 
     getAllModelWeight() {
-        axios.get(`http://localhost:5000/api/weight-model`)
+        axios.get(`${process.env.REACT_APP_API_URL}api/weight-model`)
             .then(res => {
                 this.setState({weightModel: res.data});
             });
@@ -52,7 +52,7 @@ class Admin extends Component {
 
     handleWeightFormSubmit(event) {
         // console.log(this.state.weightModel);
-        axios.put(`http://localhost:5000/api/weight-model`, {data: this.state.weightModel})
+        axios.put(`${process.env.REACT_APP_API_URL}api/weight-model`, {data: this.state.weightModel})
             .then(res => {
                 this.setState({updateStatus: true})
             });

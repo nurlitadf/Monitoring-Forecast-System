@@ -1,9 +1,9 @@
 const QueryBuilder = require('node-querybuilder');
-
+ 
 let response = null;
 let qb = null;
 
-exports.getWeightModel = async () => {
+exports.getInitialTime = async () => {
     try {
         const settings = {
             host: process.env.DB_HOST,
@@ -14,11 +14,13 @@ exports.getWeightModel = async () => {
         const pool = new QueryBuilder(settings, 'mysql', 'pool');
 
         qb = await pool.get_connection();
-
-        response = await qb.select('model, weight').get('weight_model');
-
+        response = await qb.distinct().select('initial_time')
+            .get('data_bmkg');
+ 
         console.log("Query Ran: " + qb.last_query());
-
+ 
+        // [{name: 'Mercury', position: 1}, {name: 'Mars', position: 4}]
+        // console.log("Results:", response);
     } catch (err) {
         return console.error("Uh oh! Couldn't get results: " + err.msg);
     } finally {
@@ -27,9 +29,8 @@ exports.getWeightModel = async () => {
     }
 }
 
-exports.updateWeightModel = async (data) => {
+exports.getBMKGData = async (initialTime, leadTime) => {
     try {
-        console.log(data);
         const settings = {
             host: process.env.DB_HOST,
             database: process.env.DB_NAME,
@@ -39,18 +40,18 @@ exports.updateWeightModel = async (data) => {
         const pool = new QueryBuilder(settings, 'mysql', 'pool');
 
         qb = await pool.get_connection();
-
-        data.forEach(async (e) => {
-            await qb.set({'weight': e.weight})
-                .where({'model': e.model})
-                .update('weight_model');
-        });
-        
-        qb.disconnect();
-
-        return "success";
-        
+        response = await qb.select('link')
+            .where({'initial_time': initialTime, 'lead_time': leadTime})
+            .get('data_bmkg');
+ 
+        console.log("Query Ran: " + qb.last_query());
+ 
+        // [{name: 'Mercury', position: 1}, {name: 'Mars', position: 4}]
+        // console.log("Results:", response);
     } catch (err) {
         return console.error("Uh oh! Couldn't get results: " + err.msg);
+    } finally {
+        qb.disconnect();
+        return response;
     }
 }

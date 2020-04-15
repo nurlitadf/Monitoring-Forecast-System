@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
     "highcharts": "^8.0.0",
     "highcharts-react-official": "^2.2.2",
     "jquery": "^3.4.1",
@@ -44,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-native-dotenv": "^0.2.0"
   }
 }

@@ -30,7 +30,7 @@ class Maps extends Component{
   }
 
   getMapOptions() {
-    console.log(this.props.data);
+    // console.log(this.props.data);
     return {
       chart: {
         map: 'countries/id/id-all'

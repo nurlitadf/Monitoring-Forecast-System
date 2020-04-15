@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import moment from 'moment';
+import axios from 'axios';
 
 import './styles/Option.css';
 
@@ -8,57 +8,65 @@ class OptionBMKG extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            model: "CFSv2",
-            type: "precip",
-            month: "01",
-            year: moment().year() - 1,
-        }
+            initialTimes : [],
+            initialTime: null,
+            leadTime: null,
+        };
 
-        this.handleModelChange = this.handleModelChange.bind(this);
-        this.handleTypeChange = this.handleTypeChange.bind(this);
-        this.handleMonthChange = this.handleMonthChange.bind(this);
-        this.handleYearChange = this.handleYearChange.bind(this);
+        this.getInitialTimes = this.getInitialTimes.bind(this);
+        this.handleInitialTimeChange = this.handleInitialTimeChange.bind(this);
+        this.handleLeadTimeChange = this.handleLeadTimeChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
+        this.getInitialTimes();
     }
 
-    handleModelChange(event) {
-        this.setState({model: event.target.value});
+    getInitialTimes() {
+        axios.get(`${process.env.REACT_APP_API_URL}api/bmkg-data/initial-time`)
+            .then(res => {
+                this.setState({initialTimes: res.data, leadTime: '2-11'});
+                const initialTime = this.state.initialTimes[0]['initial_time'];
+                const leadTime = '2-11';
+                this.props.handleDataChange(initialTime, leadTime)
+            });
     }
 
-    handleTypeChange(event) {
-        this.setState({type: event.target.value});
+    handleInitialTimeChange(event) {
+        const value = event.target.value.replace(/ /g, '+');
+        // console.log(value);
+        this.setState({initialTime: value});
     }
 
-    handleMonthChange(event) {
-        this.setState({month: event.target.value});
-    }
-
-    handleYearChange(event) {
-        this.setState({year: event.target.value});
+    handleLeadTimeChange(event) {
+        this.setState({leadTime: event.target.value});
     }
 
     handleSubmit(event) {
-        const { model, type, month, year } = this.state;
+        const { initialTime, leadTime } = this.state;
         // console.log("test");
-        this.props.handleMapChange(model, type, month, year);
+        this.props.handleDataChange(initialTime, leadTime);
         event.preventDefault();
     }
 
     render() {
-        const year = moment().year();
+        const initialTimes = this.state.initialTimes;
         return (
             <div className="form-style">
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group>
-                        <Form.Label>Initial Forecast Item</Form.Label>
-                        <Form.Control as="select" onChange={this.handleModelChange}>
-                            
+                        <Form.Label>Initial Forecast Time</Form.Label>
+                        <Form.Control as="select" onChange={this.handleInitialTimeChange}>
+                            {initialTimes.map((value, index) => {
+                                return (
+                                    <option value={value['initial_time']}>{value['initial_time']}</option>
+                                )
+                            })}
                         </Form.Control>
                     </Form.Group>
 
                     <Form.Group>
                         <Form.Label>Lead Time</Form.Label>
-                        <Form.Control as="select" onChange={this.handleTypeChange}>
+                        <Form.Control as="select" onChange={this.handleLeadTimeChange}>
                             <option value="2-11">2-11</option>
                             <option value="3-12">3-12</option>
                             <option value="4-13">4-13</option>
@@ -90,4 +98,4 @@ class OptionBMKG extends Component {
     }
 }
 
-export default Option;
+export default OptionBMKG;
