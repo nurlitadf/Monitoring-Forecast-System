@@ -9,14 +9,14 @@ import datetime
 URL = "https://ftp.cpc.ncep.noaa.gov/International/nmme/monthly_nmme_forecast_in_cpt_format/"
 CURRENT_YEAR = datetime.datetime.now().year
 ID_COORD = {
-	'LAT_MIN' : '-12',
-	'LAT_MAX' : '7',
-	'LONG_MIN' : '94',
-	'LONG_MAX' : '142'
+        'LAT_MIN' : '-12',
+        'LAT_MAX' : '7',
+        'LONG_MIN' : '94',
+        'LONG_MAX' : '142'
 }
 
 def is_bounded(lat, lng):
-	return ID_COORD['LAT_MIN'] <= lat <= ID_COORD['LAT_MAX'] and ID_COORD['LONG_MIN'] <= lng <= ID_COORD['LONG_MAX'] 
+        return ID_COORD['LAT_MIN'] <= lat <= ID_COORD['LAT_MAX'] and ID_COORD['LONG_MIN'] <= lng <= ID_COORD['LONG_MAX'] 
 
 
 
@@ -28,14 +28,14 @@ cur.execute(sql)
 res = cur.fetchall()
 data = dict()
 for item in res:
-	key = (item[1], item[7], item[2], item[8]) #model, month, year, type
-	value = item[3] #created_date
-	data[key] = value
+        key = (item[1], item[7], item[2], item[8]) #model, month, year, type
+        value = item[3] #created_date
+        data[key] = value
 
 resp = requests.get(URL + '?C=M;O=D')
 if not resp.ok:
-	print("API fetch failed")
-	sys.exit(1)
+        print("API fetch failed")
+        sys.exit(1)
 soup = BeautifulSoup(resp.text, 'html.parser')
 anchor = soup.find_all('a')
 for anc in anchor:
