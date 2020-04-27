@@ -9,7 +9,7 @@ DEBUG = False
 
 log = open('error.log', 'a+')
 
-db = pymysql.connect(host="103.146.203.231", user="root", password="123", database="forecast")
+db = pymysql.connect(host="103.146.203.231", user="root", password="", database="forecast")
 cur = db.cursor()
 sql = "DELETE FROM data_bmkg;"
 cur.execute(sql)

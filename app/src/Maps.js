@@ -50,7 +50,7 @@ class Maps extends Component{
       colorAxis: {
         min: 10,
         max: 35,
-        stops: [[0, '#00FFFF'], [1, '#FF0000']],
+        stops: [[0, '#1800FF'], [0.5, '#FFFFFF'], [0.75, '#FFFF00'], [1, '#FF0000']],
       },
 
       plotOptions: {

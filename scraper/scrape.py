@@ -21,7 +21,7 @@ def is_bounded(lat, lng):
 
 
 os.system("clear")
-db = pymysql.connect(host="103.146.203.231", user="root", password="123", database="forecast")
+db = pymysql.connect(host="localhost", user="root", password="", database="forecast")
 cur = db.cursor()
 sql = """SELECT * from data;"""
 cur.execute(sql)
@@ -84,7 +84,7 @@ for anc in anchor:
 			for lat in latlng:
 				lng_cnt = 94
 				for lng in lat:
-					if lng != -999:
+					if float(lng) != -999:
 						if not will_update:
 							sql = """insert into data(model, year, created_date, lat, lon, value, month, type) values ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" % (model, predict[0], created, lat_cnt, lng_cnt, lng, predict[1], types)
 							# print(sql)
