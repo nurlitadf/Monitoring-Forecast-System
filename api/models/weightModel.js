@@ -1,19 +1,21 @@
-const QueryBuilder = require('node-querybuilder');
-
 let response = null;
 let qb = null;
 
+const QueryBuilder = require('node-querybuilder');
+
+const settings = {
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
+}
+
+const pool = new QueryBuilder(settings, 'mysql', 'pool');
+
 exports.getWeightModel = async () => {
     try {
-        const settings = {
-            host: process.env.DB_HOST,
-            database: process.env.DB_NAME,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-        };
-        const pool = new QueryBuilder(settings, 'mysql', 'pool');
-
         qb = await pool.get_connection();
+        console.log("test");
 
         response = await qb.select('model, weight').get('weight_model');
 
@@ -29,15 +31,6 @@ exports.getWeightModel = async () => {
 
 exports.updateWeightModel = async (data) => {
     try {
-        // console.log(data);
-        const settings = {
-            host: process.env.DB_HOST,
-            database: process.env.DB_NAME,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-        };
-        const pool = new QueryBuilder(settings, 'mysql', 'pool');
-
         qb = await pool.get_connection();
 
         data.forEach(async (e) => {

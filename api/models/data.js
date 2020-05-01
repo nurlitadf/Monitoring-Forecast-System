@@ -1,12 +1,21 @@
-const QueryBuilder = require('node-querybuilder');
-
-const {getWeightModel} = require('./weightModel');
+const { getWeightModel } = require('./weightModel');
  
 let response = null;
 let qb = null;
 let responses = null;
 
 const models = ["CFSv2", "CMC1", "CMC2", "GFDL", "GFDL-FLOR", "NASA", "NCAR-CCSM4"];
+
+const QueryBuilder = require('node-querybuilder');
+
+const settings = {
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
+}
+
+const pool = new QueryBuilder(settings, 'mysql', 'pool');
 
 getNMMEWeighted = async (responses, weight) => {
     // console.log(weight);
@@ -35,14 +44,6 @@ getNMMEWeighted = async (responses, weight) => {
 
 exports.getDataByModelMonthYear = async (model, type, month, year) => {
     try {
-        const settings = {
-            host: process.env.DB_HOST,
-            database: process.env.DB_NAME,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-        };
-        const pool = new QueryBuilder(settings, 'mysql', 'pool');
-
         qb = await pool.get_connection();
         if(model === "NMME-Weighted") {
             responses = await Promise.all(models.map(async (value) => {
@@ -100,14 +101,6 @@ exports.getDataByModelMonthYear = async (model, type, month, year) => {
 
 exports.getData = async () => {
     try {
-        const settings = {
-            host: process.env.DB_HOST,
-            database: process.env.DB_NAME,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-        };
-        const pool = new QueryBuilder(settings, 'mysql', 'pool');
-
         qb = await pool.get_connection();
         response = await qb.select('lat, lon, value')
             .get('data');

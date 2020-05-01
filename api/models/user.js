@@ -1,21 +1,19 @@
-const QueryBuilder = require('node-querybuilder');
 const bcrypt = require('bcrypt');
-
-const saltRounds = 10;
-
-let response = null;
 let qb = null;
+
+const QueryBuilder = require('node-querybuilder');
+
+const settings = {
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
+}
+
+const pool = new QueryBuilder(settings, 'mysql', 'pool');
 
 exports.login = async (username, password) => {
     try {
-        const settings = {
-            host: process.env.DB_HOST,
-            database: process.env.DB_NAME,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-        };
-        const pool = new QueryBuilder(settings, 'mysql', 'pool');
-
         qb = await pool.get_connection();
 
         const response = await qb.select('password')
