@@ -22,7 +22,7 @@ class Maps extends Component{
 
     this.getMapOptions = this.getMapOptions.bind(this);
 
-    console.log(this.state.data);
+    // console.log(this.state.data);
   }
 
   componentDidMount() {

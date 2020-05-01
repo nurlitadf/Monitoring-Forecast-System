@@ -29,7 +29,7 @@ exports.getWeightModel = async () => {
 
 exports.updateWeightModel = async (data) => {
     try {
-        console.log(data);
+        // console.log(data);
         const settings = {
             host: process.env.DB_HOST,
             database: process.env.DB_NAME,

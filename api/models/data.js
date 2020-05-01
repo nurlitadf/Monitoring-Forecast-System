@@ -9,7 +9,7 @@ let responses = null;
 const models = ["CFSv2", "CMC1", "CMC2", "GFDL", "GFDL-FLOR", "NASA", "NCAR-CCSM4"];
 
 getNMMEWeighted = async (responses, weight) => {
-    console.log(weight);
+    // console.log(weight);
     let ret = [];
     responses[0].forEach((value) => {
         let sum = 0;
@@ -54,7 +54,7 @@ exports.getDataByModelMonthYear = async (model, type, month, year) => {
             // console.log(responses);
 
             let weight = await getWeightModel();
-            console.log(weight);
+            // console.log(weight);
             let ret = [];
             let lat, lon;
             for(lat = -12; lat <= 7; lat++) {

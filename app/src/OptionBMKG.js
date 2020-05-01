@@ -25,7 +25,7 @@ class OptionBMKG extends Component {
         axios.get(`${process.env.REACT_APP_API_URL}api/bmkg-data/initial-time`)
             .then(res => {
                 const initialTime = res.data[0]['initial_time'];
-                console.log(initialTime);
+                // console.log(initialTime);
                 const leadTime = '2-11';
                 this.props.handleDataChange(initialTime, leadTime);
                 this.setState({initialTimes: res.data, leadTime: '2-11', initialTime: initialTime.replace(/ /g, '+')});
@@ -44,7 +44,7 @@ class OptionBMKG extends Component {
 
     handleSubmit(event) {
         const { initialTime, leadTime } = this.state;
-        console.log(initialTime, leadTime);
+        // console.log(initialTime, leadTime);
         this.props.handleDataChange(initialTime, leadTime);
         event.preventDefault();
     }
