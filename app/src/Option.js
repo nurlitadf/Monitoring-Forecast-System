@@ -56,9 +56,9 @@ class Option extends Component {
                             <option value="CMC1">CMC1</option>
                             <option value="CMC2">CMC2</option>
                             <option value="GFDL">GFDL</option>
-                            <option value="GFDL-FLOR">GFDL-FLOR</option>
+                            <option value="gfdl_flor">GFDL-FLOR</option>
                             <option value="NASA">NASA</option>
-                            <option value="NCAR-CCSM4">NCAR-CCSM4</option>
+                            <option value="ncar_ccsm4">NCAR-CCSM4</option>
                             <option value="NMME">NMME</option>
                             <option value="NMME-Weighted">NMME-Weighted</option>
                         </Form.Control>

@@ -4,7 +4,7 @@ let response = null;
 let qb = null;
 let responses = null;
 
-const models = ["CFSv2", "CMC1", "CMC2", "GFDL", "GFDL-FLOR", "NASA", "NCAR-CCSM4"];
+const models = ["CFSv2", "CMC1", "CMC2", "GFDL", "GFDL_FLOR", "NASA", "NCAR_CCSM4"];
 
 const QueryBuilder = require('node-querybuilder');
 

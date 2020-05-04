@@ -19,7 +19,7 @@ def is_bounded(lat, lng):
     return ID_COORD['LAT_MIN'] <= lat <= ID_COORD['LAT_MAX'] and ID_COORD['LONG_MIN'] <= lng <= ID_COORD['LONG_MAX'] 
 
 os.system("clear")
-db = pymysql.connect(host="localhost", user="root", password="", database="forecast")
+db = pymysql.connect(host="localhost", user="root", password="123", database="forecast")
 cur = db.cursor()
 sql = """SELECT * from data;"""
 cur.execute(sql)
