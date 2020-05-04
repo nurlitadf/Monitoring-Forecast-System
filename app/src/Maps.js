@@ -26,7 +26,10 @@ class Maps extends Component{
   }
 
   componentDidMount() {
-    Highcharts.charts.forEach(chart => chart.reflow());
+    Highcharts.charts.forEach((chart) => {
+      if(chart !== undefined) 
+        chart.reflow();
+    });
   }
 
   getMapOptions() {
@@ -48,8 +51,8 @@ class Maps extends Component{
       },
     
       colorAxis: {
-        min: 10,
-        max: 35,
+        min: this.props.range.min,
+        max: this.props.range.max,
         stops: [[0, '#1800FF'], [0.5, '#FFFFFF'], [0.75, '#FFFF00'], [1, '#FF0000']],
       },
 

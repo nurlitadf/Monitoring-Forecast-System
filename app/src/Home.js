@@ -7,6 +7,21 @@ import OptionBMKG from './OptionBMKG';
 
 import './styles/Home.css';
 
+const rangeValue = {
+  precip: {
+    min: 0,
+    max: 20
+  },
+  tmp2m: {
+    min: 20,
+    max: 35
+  },
+  sst: {
+    min: 20,
+    max: 35
+  }
+}
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +39,12 @@ class Home extends Component {
   }
 
   handleMapChange(model, type, month, year) {
+    this.setState({
+      model,
+      type,
+      month,
+      year
+    });
     axios.get(`${process.env.REACT_APP_API_URL}api/data?model=${model}&type=${type}&year=${year}&month=${month}`)
       .then(res => {
           // console.log(res);
@@ -44,7 +65,10 @@ class Home extends Component {
   render() {
     let maps;
     if(this.state.data.data !== undefined && this.state.data.data.length)
-      maps = <Maps data = {this.state.data.data} />
+      maps = <Maps 
+        data = {this.state.data.data} 
+        range = {rangeValue[this.state.type]}
+      />
     else
       maps = <h3 className="unavailable">Data Tidak Tersedia</h3>
 

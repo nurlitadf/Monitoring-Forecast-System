@@ -70,6 +70,8 @@ exports.getDataByModelMonthYear = async (model, type, month, year) => {
                         idx++;
                         // console.log(sum);
                     });
+                    if(sum == 0)
+                        continue;
                     ret.push({
                         lat,
                         lon,

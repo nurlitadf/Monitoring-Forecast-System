@@ -4,13 +4,13 @@ const { register, login } = require('../models/user');
 
 const router = express.Router();
 
-router.post('/register', async (req, res, next) => {
-  const { username, password } = req.body;
-  // console.log(req.body);
-  register(username, password).then((response) => {
-    res.status(200).send(response);
-  });
-});
+// router.post('/register', async (req, res, next) => {
+//   const { username, password } = req.body;
+//   // console.log(req.body);
+//   register(username, password).then((response) => {
+//     res.status(200).send(response);
+//   });
+// });
 
 router.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
