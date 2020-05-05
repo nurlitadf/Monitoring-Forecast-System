@@ -57,8 +57,10 @@ with requests.Session() as sess:
         try:
           print(str(11 - try_count) + " tries " + new_url)
           frc = requests.get(new_url)
+          success_response = True
         except:
           try_count -= 1
+          time.sleep(1)
       if not success_response:
         force_close("Connection error from hosts, e.g: requests limit / load balancing")
       splitted = frc.text.split(', ')
